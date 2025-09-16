@@ -1,0 +1,55 @@
+# GitHub Pages 설정
+title: 동접Lab - 이동약자 접근성 AI 프로젝트
+description: 이동약자 접근성 판단을 위한 AI 모델 개발 및 서비스 구현
+author: 동접Lab 팀
+email: contact@dongjeop-lab.com
+
+# GitHub Pages 설정
+baseurl: ""
+url: "https://dongjeop-lab.github.io"
+
+# 빌드 설정
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# 플러그인
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO 설정
+seo:
+  type: Organization
+  name: 동접Lab
+  description: 이동약자 접근성 판단을 위한 AI 모델 개발 및 서비스 구현
+  url: https://dongjeop-lab.github.io
+  logo: /assets/logo.png
+
+# 네비게이션
+navigation:
+  - title: 프로젝트 소개
+    url: /#about
+  - title: 타임라인
+    url: /#timeline
+  - title: 팀 소개
+    url: /#team
+  - title: 저장소
+    url: /#repositories
+
+# 소셜 링크
+social:
+  github: Dongjeop-lab
+  email: contact@dongjeop-lab.com
+
+# 빌드 제외 파일
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/

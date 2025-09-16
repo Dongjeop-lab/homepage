@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동접Lab - 이동약자 접근성 AI 프로젝트</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            padding: 80px 0;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #333;
+        }
+
+        .section h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        /* Project Overview */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .project-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #667eea;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            width: 50%;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 40px;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 40px;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -20px;
+            border-left-color: white;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -20px;
+            border-right-color: white;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .team-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .team-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 50px !important;
+                padding-right: 0 !important;
+                text-align: left !important;
+            }
+
+            .timeline-content::before {
+                left: -20px !important;
+                border-right-color: white !important;
+                border-left-color: transparent !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">🚀 동접Lab</div>
+                <ul class="nav-links">
+                    <li><a href="#about">프로젝트 소개</a></li>
+                    <li><a href="#timeline">타임라인</a></li>
+                    <li><a href="#team">팀 소개</a></li>
+                    <li><a href="#repositories">저장소</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>동접Lab</h1>
+            <p>이동약자 접근성 판단을 위한 AI 모델 개발 및 서비스 구현</p>
+            <a href="#about" class="cta-button">프로젝트 알아보기</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- About Section -->
+            <section id="about" class="section">
+                <h2>🎯 프로젝트 개요</h2>
+                <p style="text-align: center; font-size: 1.2em; margin-bottom: 50px; color: #666;">
+                    동접Lab은 AI 기술을 활용하여 이동약자의 접근성을 판단하고, 
+                    더 나은 접근성 환경을 만들기 위한 혁신적인 프로젝트입니다.
+                </p>
+
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h4>🤖 P1: 기똥찬 모델 만들기</h4>
+                        <p>이동약자 접근성 판단을 위한 고정밀 AI 모델 개발</p>
+                        <ul style="margin-top: 15px; padding-left: 20px;">
+                            <li>최소 맥락 정보 정의</li>
+                            <li>Model_v1 아키텍처 설계</li>
+                            <li>80% 이상 정확도 목표</li>
+                        </ul>
+                    </div>
+                    <div class="project-card">
+                        <h4>🎨 P2: 모델 어필 및 POC</h4>
+                        <p>AI 모델을 활용한 실제 서비스 구현 및 검증</p>
+                        <ul style="margin-top: 15px; padding-left: 20px;">
+                            <li>Service_v1 캠페인 서비스</li>
+                            <li>Service_v2 고도화 서비스</li>
+                            <li>Demo_v1 홍보 페이지</li>
+                        </ul>
+                    </div>
+                    <div class="project-card">
+                        <h4>📊 Dataset_v1</h4>
+                        <p>한국 실내 이미지 태그 데이터셋 구축</p>
+                        <ul style="margin-top: 15px; padding-left: 20px;">
+                            <li>이동약자 접근성 정보 포함</li>
+                            <li>연구용 데이터셋 제공</li>
+                            <li>1만 장 이상 목표</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">21</div>
+                        <div>총 주차</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">7</div>
+                        <div>주요 산출물</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">5</div>
+                        <div>주요 마일스톤</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">80%</div>
+                        <div>목표 정확도</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Timeline Section -->
+            <section id="timeline" class="section">
+                <h2>📅 프로젝트 타임라인</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">8월 24일</div>
+                            <h3>방향성 확정</h3>
+                            <p>P1/P2 방향성 및 데이터 수집 방안 확정</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">9월 28일</div>
+                            <h3>중간 발표</h3>
+                            <p>모델 성과 발표 & 캠페인 기획 발표 & 데이터셋 연구결과 발표</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">11월 23일</div>
+                            <h3>Service_v2 완성</h3>
+                            <p>Service_v2 개발 완료 및 통합 테스트</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">12월 6일</div>
+                            <h3>캠페인 종료</h3>
+                            <p>Service_v1 캠페인 종료 및 성과 측정</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">12월 13일</div>
+                            <h3>최종 발표</h3>
+                            <p>최종 성과 공유회 및 차기 계획 논의</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team Section -->
+            <section id="team" class="section">
+                <h2>👥 팀 소개</h2>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <h4>🤖 AI/ML 팀</h4>
+                        <p><strong>기간:</strong> 8/11 ~ 11/23 (15주)</p>
+                        <p>Model_v1 개발 및 고도화, 최소 맥락 정보 정의 및 검증</p>
+                    </div>
+                    <div class="team-card">
+                        <h4>🔧 백엔드/데이터 팀</h4>
+                        <p><strong>기간:</strong> 8/25 ~ 11/23 (13주)</p>
+                        <p>크롤링 시스템, 데이터 수집, API 개발 및 모델 배포</p>
+                    </div>
+                    <div class="team-card">
+                        <h4>🎨 프론트엔드/UXUI 팀</h4>
+                        <p><strong>기간:</strong> 8/25 ~ 11/23 (13주)</p>
+                        <p>사용자 인터페이스 설계 및 개발, 사용성 테스트</p>
+                    </div>
+                    <div class="team-card">
+                        <h4>📊 기획/PM 팀</h4>
+                        <p><strong>기간:</strong> 7/21 ~ 12/13 (21주)</p>
+                        <p>프로젝트 관리, 캠페인 기획, 성과 관리</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Repositories Section -->
+            <section id="repositories" class="section">
+                <h2>📁 저장소</h2>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h4>🔗 dongjeop-front</h4>
+                        <p>프론트엔드 저장소</p>
+                        <p><strong>기술 스택:</strong> TypeScript</p>
+                        <a href="https://github.com/Dongjeop-lab/dongjeop-front" target="_blank" style="color: #667eea; text-decoration: none;">→ 저장소 보기</a>
+                    </div>
+                    <div class="project-card">
+                        <h4>🔗 dongjeop-backdata</h4>
+                        <p>백엔드 및 데이터 저장소</p>
+                        <p><strong>기능:</strong> API, 데이터 처리, 모델 배포</p>
+                        <a href="https://github.com/Dongjeop-lab/dongjeop-backdata" target="_blank" style="color: #667eea; text-decoration: none;">→ 저장소 보기</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://github.com/Dongjeop-lab" target="_blank">GitHub Organization</a>
+                <a href="https://github.com/Dongjeop-lab/dongjeop-front" target="_blank">Frontend Repository</a>
+                <a href="https://github.com/Dongjeop-lab/dongjeop-backdata" target="_blank">Backend Repository</a>
+            </div>
+            <p>&copy; 2024 동접Lab. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,107 +1,69 @@
-# 🚀 동접Lab GitHub Pages
+# React + TypeScript + Vite
 
-동접Lab 프로젝트의 공식 웹사이트입니다.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## 📋 프로젝트 개요
+Currently, two official plugins are available:
 
-**동접Lab**은 AI 기술을 활용하여 이동약자의 접근성을 판단하고, 더 나은 접근성 환경을 만들기 위한 혁신적인 프로젝트입니다.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-### 🎯 핵심 목표
-- **P1**: 기똥찬 모델 만들기 (이동약자 접근성 판단 AI)
-- **P2**: 모델 어필 및 POC (관리자 대시보드, B2C 서비스)
+## Expanding the ESLint configuration
 
-## 🌐 웹사이트 접속
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-- **GitHub Pages**: [https://dongjeop-lab.github.io](https://dongjeop-lab.github.io)
-- **GitHub Organization**: [https://github.com/Dongjeop-lab](https://github.com/Dongjeop-lab)
+```js
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-## 📁 저장소 구조
+      // Remove tseslint.configs.recommended and replace with this
+      ...tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      ...tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      ...tseslint.configs.stylisticTypeChecked,
 
-```
-dongjeop-lab.github.io/
-├── index.html          # 메인 페이지
-├── _config.yml         # Jekyll 설정
-├── README.md           # 프로젝트 설명
-├── project_timeline.html # 상세 타임라인
-└── assets/             # 정적 자원
-```
-
-## 🛠️ 기술 스택
-
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Styling**: CSS Grid, Flexbox, CSS Variables
-- **Deployment**: GitHub Pages
-- **Build Tool**: Jekyll (선택사항)
-
-## 📊 주요 기능
-
-- ✅ 반응형 디자인
-- ✅ 부드러운 스크롤 네비게이션
-- ✅ 인터랙티브 타임라인
-- ✅ 팀 소개 섹션
-- ✅ 저장소 링크
-- ✅ 모바일 최적화
-
-## 🚀 로컬 개발
-
-### 1. 저장소 클론
-```bash
-git clone https://github.com/Dongjeop-lab/dongjeop-lab.github.io.git
-cd dongjeop-lab.github.io
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-### 2. 로컬 서버 실행
-```bash
-# Python 3 사용
-python -m http.server 8000
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-# 또는 Node.js 사용
-npx serve .
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-### 3. 브라우저에서 확인
-```
-http://localhost:8000
-```
-
-## 📝 업데이트 방법
-
-1. **파일 수정**: `index.html` 또는 다른 파일 수정
-2. **커밋**: 변경사항을 Git에 커밋
-3. **푸시**: GitHub에 푸시
-4. **자동 배포**: GitHub Pages가 자동으로 업데이트
-
-```bash
-git add .
-git commit -m "Update website content"
-git push origin main
-```
-
-## 🎨 커스터마이징
-
-### 색상 변경
-CSS 변수를 수정하여 색상을 변경할 수 있습니다:
-
-```css
-:root {
-  --primary-color: #667eea;
-  --secondary-color: #764ba2;
-  --text-color: #333;
-}
-```
-
-### 섹션 추가
-`index.html`의 `main-content` 섹션에 새로운 섹션을 추가할 수 있습니다.
-
-## 📞 연락처
-
-- **GitHub**: [@Dongjeop-lab](https://github.com/Dongjeop-lab)
-- **이메일**: contact@dongjeop-lab.com
-
-## 📄 라이선스
-
-이 프로젝트는 MIT 라이선스 하에 배포됩니다.
-
----
-
-*동접Lab 팀이 함께 만드는 더 나은 접근성 환경을 위한 여정에 함께해주세요! 🚀*

@@ -1,0 +1,55 @@
+<aside>
+
+Service_v1 : {이미지 수집자 : 이동약자} 를 대상으로 한 켐페인 기획 & 서비스 개발
+
+Service_v2 : AI 모델 고도화 이후 → 모델을 활용한 서비스 방안
+
+Model_v1 : [최소맥락정의](https://www.notion.so/25c930eb70ac80a9a894cbb99f252a10?pvs=21)에 맞는 모델
+
+Demo_v1 : Service_v1 을 홍보하는 페이지
+
+</aside>
+
+### PI 1 – 1차 개발 사이클 (7/21 ~ 9/28, 총 10주)
+
+| PI & Sprint | 기간 | 주요 내용 | 세부 작업(*서비스=데이터 수집을 위한 서비스) |
+| --- | --- | --- | --- |
+| [PI 1] Sprint 1 | 7/21 ~ 8/10 | **Kick-off**  | Kick-off 미팅 |
+| [PI 1] Sprint 2 | 8/11 ~ 8/24 | **Alignment** | Alignment 미팅 |
+| [PI 1] Sprint 2 | 8/25 ~ 8/31 (1주) | **크롤링 & 라벨링 Admin 설계** | **`AI/ML`**: Model_v1 아키텍처 설계 (1차)
+**`BE/DE`**: 크롤링 & 라벨링 설계
+**`FE & UX/UI & PM`** : 가설 검증 인터뷰 계획 |
+| [PI 1] Sprint 3 | 9/01 ~ 9/07 (1주) | **Service_v1 기획 확정** | **`AI/ML & BE/DE`** : OUTPUT 형태 확정 및 labeling 준비
+**`BE/DE`**: 크롤링 진행
+**`FE & UX/UI & PM`** : 인터뷰 → Service_v1 기획 |
+| [PI 1] Sprint 3 | 9/08 ~ 9/14 (1주) | **Model_v1 학습 시작** | **`AI/ML`** :  Baseline 구축 완료 및 1차 개선안 선정
+**`FE & UXUI`** : Service_v1 설계 
+**`BE/DE`**: 크롤링 진행 & Service_v1 설계
+**`PM`** : 캠페인 기획 마무리
+
+ALL : 레이블링 작업 [1차] |
+| [PI 1] Sprint 3 | 9/15 ~ 9/21 (1주) | **Model_v1 성능 점검, 캠페인 기획 확정** | **`AI/ML`** :  1차 AI 개선안 구현
+**`BE/DE`** : Service_v1 개발
+**`FE & UX/UI`** : Service_v1 & Demo_v1 개발
+**`PM`** : 캠페인 사전 협의
+
+ALL : 레이블링 작업 (2차) |
+| [PI 1] IP Break | 9/22~9/28 (1주) | **중간 발표 내용 : 모델 성과 발표 & 캠페인 기획 발표** | **`FE & UX/UI`** : Service_v1 배포
+**`BE/DE`** : Service_v1 & Demo_v1 배포
+**`AI/ML`** :  1차 AI 개선안 학습 및 평가 |
+
+### PI 2 – 2차 개발 사이클 (9/29 ~ 12/13, 총 11주)
+
+| PI & Sprint | 기간 | 주요 내용 | 세부 작업 |
+| --- | --- | --- | --- |
+| [PI 2] Sprint 1 | 9/29 ~ 10/5 (1주) | **캠페인 시작, 웹 배포, SNS·협력 채널 홍보 시작** | **`AI/ML`** :  Service_v1 고도화 (1차)
+**`BE/DE & FE & UX/UI`** : Service_v1 안정화 (1차) |
+| [PI 2] Sprint 1 | 10/6 ~ 10/19 (2주) |  **추가 방향성 논의 : Service_v1 고도화 or Service_v2 기획** | **`AI/ML`** :  Model_v1 고도화 (2차)
+**`BE/DE & FE`** : Service_v1 안정화 (2차) |
+| [PI 2] Sprint 2 | 10/20 ~ 10/26 (1주) |  | **`AI/ML`** :  Model_v1 고도화 (3차) |
+| [PI 2] Sprint 2 | 10/27 ~ 11/02 (1주) | **캠페인 종료** |  |
+| [PI 2] Sprint 3 | 11/03 ~ 11/23 (3주) | **최종 안정화·문서화** | 코드 정리, 데이터셋 정리, 최종 보고서 작성 |
+| [PI 2] Sprint 3 | 11/24 ~ 12/7 (2주) | **최종 점검·성과 준비** | 성과 지표 산출, 시연 준비, 발표자료 작성 |
+| [PI 2] IP Break | 12/8 ~ 12/13 (1주) | **최종 성과 공유회** | 결과 발표, 차기 계획 논의 |
+
+[초안 (1)](https://www.notion.so/1-2707504fa76b80bfa650def7c9233420?pvs=21)

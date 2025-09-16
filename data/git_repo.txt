@@ -1,0 +1,2 @@
+https://github.com/Dongjeop-lab/dongjeop-backdata.git
+https://github.com/Dongjeop-lab/dongjeop-front.git

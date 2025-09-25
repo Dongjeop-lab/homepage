@@ -643,8 +643,8 @@ const DongjeobLab: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Button size="lg" className="group" onClick={() => setShowApplyPage(true)}>
-            프로젝트 지원하기
+          <Button size="lg" className="group" disabled>
+            모집 마감
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
           <Button variant="outline" size="lg" className="group" asChild>

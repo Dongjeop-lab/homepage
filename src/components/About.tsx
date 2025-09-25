@@ -32,7 +32,7 @@ const About: React.FC = () => {
       ]
     },
     {
-      title: '🎨 P2: 모델 어필 및 POC',
+      title: '🎨 P2: 기똥찬 AI 모델 어필하기',
       description: 'AI 모델을 활용한 실제 서비스 구현 및 검증',
       features: [
         'Service_v1 캠페인 서비스',

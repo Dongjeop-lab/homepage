@@ -14,12 +14,19 @@ import {
   Star,
   MapPin,
   Mail,
-  Phone
+  Phone,
+  ChevronUp
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import NotYetPage from '@/components/NotYetPage';
+import ProjectPage from '@/components/ProjectPage';
+import ApplyPage from '@/components/ApplyPage';
+import TimelinePage from '@/components/Timeline';
+import ServiceV1Detail from '@/components/ServiceV1Detail';
+import ServiceV2Detail from '@/components/ServiceV2Detail';
 
 interface Dot {
   x: number;
@@ -39,6 +46,9 @@ interface ProjectCardProps {
   githubUrl?: string;
   liveUrl?: string;
   imageUrl?: string;
+  projectId?: string;
+  onClick?: () => void;
+  onNotYetClick?: () => void;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ 
@@ -47,51 +57,78 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   tech, 
   githubUrl, 
   liveUrl, 
-  imageUrl 
+  imageUrl,
+  projectId,
+  onClick,
+  onNotYetClick
 }) => (
   <motion.div
-    whileHover={{ y: -10, scale: 1.02 }}
+    whileHover={{ y: -5 }}
     transition={{ duration: 0.3 }}
-    className="group relative overflow-hidden rounded-xl border border-border bg-background/80 backdrop-blur-sm p-6 shadow-lg hover:shadow-xl"
+    className="group relative overflow-hidden rounded-lg border border-border bg-background hover:border-primary/50 transition-all duration-300 cursor-pointer"
+    onClick={onClick}
   >
-    {imageUrl && (
-      <div className="mb-4 h-48 w-full overflow-hidden rounded-lg bg-muted">
-        <img 
-          src={imageUrl} 
-          alt={title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+    {/* GitHub-style header */}
+    <div className="flex items-center justify-between p-4 border-b border-border bg-muted/30">
+      <div className="flex items-center space-x-2">
+        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+        <div className="w-3 h-3 rounded-full bg-green-500"></div>
       </div>
-    )}
-    <h3 className="text-xl font-bold text-foreground mb-2">{title}</h3>
-    <p className="text-muted-foreground mb-4 line-clamp-3">{description}</p>
-    <div className="flex flex-wrap gap-2 mb-4">
-      {tech.map((item, index) => (
-        <span 
-          key={index}
-          className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary border border-primary/20"
-        >
-          {item}
-        </span>
-      ))}
+      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+        <Github className="h-4 w-4" />
+        <span>Dongjeop-lab</span>
+      </div>
     </div>
-    <div className="flex gap-3">
-      {githubUrl && (
-        <Button variant="outline" size="sm" asChild>
-          <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-            <Github className="h-4 w-4 mr-2" />
-            코드
-          </a>
-        </Button>
-      )}
-      {liveUrl && (
-        <Button size="sm" asChild>
-          <a href={liveUrl} target="_blank" rel="noopener noreferrer">
-            <ExternalLink className="h-4 w-4 mr-2" />
-            데모
-          </a>
-        </Button>
-      )}
+
+    {/* Content */}
+    <div className="p-4">
+      <div className="flex items-start justify-between mb-3">
+        <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+        <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+          <div className="w-2 h-2 rounded-full bg-green-500"></div>
+          <span>Public</span>
+        </div>
+      </div>
+      
+      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+        {description}
+      </p>
+      
+      <div className="flex flex-wrap gap-1 mb-4">
+        {tech.map((item, index) => (
+          <span 
+            key={index}
+            className="px-2 py-1 text-xs rounded-md bg-muted text-muted-foreground border"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+      
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex items-center space-x-4">
+          <span>Updated 2 days ago</span>
+          <span>•</span>
+          <span>MIT License</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          {githubUrl && (
+            <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={(e) => { e.stopPropagation(); onNotYetClick?.(); }}>
+              <Github className="h-3 w-3 mr-1" />
+              Code
+            </Button>
+          )}
+          {liveUrl && (
+            <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={(e) => { e.stopPropagation(); onNotYetClick?.(); }}>
+              <ExternalLink className="h-3 w-3 mr-1" />
+              Demo
+            </Button>
+          )}
+        </div>
+      </div>
     </div>
   </motion.div>
 );
@@ -101,11 +138,79 @@ const DongjeobLab: React.FC = () => {
   const animationFrameId = useRef<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [showNotYetPage, setShowNotYetPage] = useState<boolean>(false);
+  const [currentProject, setCurrentProject] = useState<string | null>(null);
+  const [showApplyPage, setShowApplyPage] = useState<boolean>(false);
+  const [showTimelinePage, setShowTimelinePage] = useState<boolean>(false);
+  const [showServiceV1Detail, setShowServiceV1Detail] = useState<boolean>(false);
+  const [showServiceV2Detail, setShowServiceV2Detail] = useState<boolean>(false);
+
+  // URL 라우팅 처리
+  useEffect(() => {
+    const handleRoute = () => {
+      const path = window.location.pathname;
+      const hash = window.location.hash;
+      
+      // URL 경로에 따라 페이지 설정
+      if (path === '/timeline' || hash === '#timeline') {
+        setShowTimelinePage(true);
+        setShowNotYetPage(false);
+        setShowApplyPage(false);
+        setShowServiceV1Detail(false);
+        setShowServiceV2Detail(false);
+      } else if (path === '/service-v1' || hash === '#service-v1') {
+        setShowServiceV1Detail(true);
+        setShowTimelinePage(false);
+        setShowNotYetPage(false);
+        setShowApplyPage(false);
+        setShowServiceV2Detail(false);
+      } else if (path === '/service-v2' || hash === '#service-v2') {
+        setShowServiceV2Detail(true);
+        setShowTimelinePage(false);
+        setShowNotYetPage(false);
+        setShowApplyPage(false);
+        setShowServiceV1Detail(false);
+      } else if (path === '/apply' || hash === '#apply') {
+        setShowApplyPage(true);
+        setShowTimelinePage(false);
+        setShowNotYetPage(false);
+        setShowServiceV1Detail(false);
+        setShowServiceV2Detail(false);
+      } else {
+        // 홈페이지로 리셋
+        setShowTimelinePage(false);
+        setShowNotYetPage(false);
+        setShowApplyPage(false);
+        setShowServiceV1Detail(false);
+        setShowServiceV2Detail(false);
+      }
+    };
+
+    // 초기 로드 시 라우팅 처리
+    handleRoute();
+
+    // URL 변경 감지
+    window.addEventListener('popstate', handleRoute);
+    window.addEventListener('hashchange', handleRoute);
+
+    return () => {
+      window.removeEventListener('popstate', handleRoute);
+      window.removeEventListener('hashchange', handleRoute);
+    };
+  }, []);
 
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 10);
   });
+
+  // 페이지 상단으로 스크롤하는 함수
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   const dotsRef = useRef<Dot[]>([]);
   const gridRef = useRef<Record<string, number[]>>({});
@@ -292,39 +397,114 @@ const DongjeobLab: React.FC = () => {
 
   const projects = [
     {
-      title: "실시간 동접자 모니터링 시스템",
-      description: "웹소켓을 활용한 실시간 사용자 접속 현황 모니터링 및 분석 대시보드",
-      tech: ["React", "Node.js", "WebSocket", "Chart.js"],
-      githubUrl: "https://github.com/dongjeoblab/realtime-monitor",
-      liveUrl: "https://monitor.dongjeoblab.com",
-      imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop"
+      title: "model-v1",
+      description: "이동약자 접근성을 판단하는 AI 모델 개발. 최소맥락정의에 맞는 정확도 80% 이상의 모델을 목표로 합니다.",
+      tech: ["Python", "PyTorch", "TensorFlow", "Computer Vision", "VLLM","Accessibility"],
+      githubUrl: "https://github.com/Dongjeop-lab/model-v1",
+      projectId: "model-v1"
     },
     {
-      title: "AI 기반 사용자 행동 분석",
-      description: "머신러닝을 활용한 사용자 패턴 분석 및 예측 모델링 시스템",
-      tech: ["Python", "TensorFlow", "FastAPI", "PostgreSQL"],
-      githubUrl: "https://github.com/dongjeoblab/ai-analytics",
-      imageUrl: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=300&fit=crop"
+      title: "service-v1",
+      description: "사용자 참여를 통한 접근성 이미지 데이터 수집 서비스. 1,000명 이상의 참여자를 목표로 합니다.",
+      tech: ["React", "Node.js", "MongoDB", "Image Processing"],
+      githubUrl: "https://github.com/Dongjeop-lab/service-v1",
+      liveUrl: "https://dongjeop-lab.github.io/campaign",
+      projectId: "service-v1"
     },
     {
-      title: "마이크로서비스 아키텍처 플랫폼",
-      description: "확장 가능한 마이크로서비스 기반 웹 애플리케이션 플랫폼",
-      tech: ["Docker", "Kubernetes", "Go", "Redis"],
-      githubUrl: "https://github.com/dongjeoblab/microservices",
-      liveUrl: "https://platform.dongjeoblab.com",
-      imageUrl: "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=400&h=300&fit=crop"
+      title: "service-v2",
+      description: "고도화된 AI 모델을 활용한 실제 서비스. 사용자 피드백을 통한 지속적인 개선을 목표로 합니다.",
+      tech: ["AI/ML", "FastAPI", "React", "MySQL"],
+      githubUrl: "https://github.com/Dongjeop-lab/service-v2",
+      projectId: "service-v2"
+    },
+    {
+      title: "dataset-v1",
+      description: "이동약자 접근성 정보를 포함한 한국 실내 이미지 연구용 데이터셋 구축",
+      tech: ["Data Augmentation", "Image Captioning", "Research Dataset"],
+      githubUrl: "https://github.com/Dongjeop-lab/dataset-v1",
+      projectId: "dataset-v1"
     }
   ];
 
   const teamMembers = [
-    { name: "김동접", role: "Lead Developer", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" },
-    { name: "박연결", role: "Frontend Developer", avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face" },
-    { name: "이실시간", role: "Backend Developer", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" },
-    { name: "최분석", role: "Data Scientist", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face" }
+    // 랩장
+    { name: "조현욱", role: "랩장", avatar: "/homepage/team/leader_cho_hyunwook.JPG" },
+    
+    // PM
+    { name: "이수민", role: "PM", avatar: "/homepage/team/PM_lee_sumin.png" },
+    
+    // 팀장들
+    { name: "박희수", role: "AIML 팀장", avatar: "/homepage/team/AIML_park_heesu_leader.jpg" },
+    { name: "강호형", role: "BEDE 팀장", avatar: "/homepage/team/BEDE_kang_hohyung_leader.jpg" },
+    { name: "양혜림", role: "FE 팀장", avatar: "/homepage/team/FE_yang_hyerim_leader.jpg" },
+    { name: "이윤선", role: "UXUI 팀장", avatar: "/homepage/team/UXUI_lee_yunsun_leader.jpg" },
+    
+    // AIML 팀
+    { name: "김서영", role: "AIML", avatar: "/homepage/team/AIML_kim_seoyoung.png" },
+    { name: "민지호", role: "AIML", avatar: "/homepage/team/AIML_min_jeeho.jpg" },
+    { name: "이영준", role: "AIML", avatar: "/homepage/team/AIML_lee_youngjun.jpg" },
+    
+    // BEDE 팀
+    { name: "김동욱", role: "BEDE", avatar: "/homepage/team/BEDE_kim_dongwook.png" },
+    { name: "박수현", role: "BEDE", avatar: "/homepage/team/BEDE_park_soohyun.jpg" },
+    { name: "이노정", role: "BEDE", avatar: "/homepage/team/BEDE_lee_nojung.jpeg" },
+    
+    // FE 팀
+    { name: "조은", role: "FE", avatar: "/homepage/team/FE_cho_eun.png" },
+    
+    // UXUI 팀
+    { name: "임유주", role: "UXUI", avatar: "/homepage/team/UXUI_im_yuju.jpg" }
   ];
 
+  if (showNotYetPage) {
+    return <NotYetPage onGoBack={() => setShowNotYetPage(false)} />;
+  }
+
+  if (currentProject) {
+    return <ProjectPage projectId={currentProject} onGoBack={() => setCurrentProject(null)} onNotYetClick={() => setShowNotYetPage(true)} />;
+  }
+
+  if (showApplyPage) {
+    return <ApplyPage onGoBack={() => setShowApplyPage(false)} />;
+  }
+
+  if (showServiceV2Detail) {
+    return <ServiceV2Detail onGoBack={() => {
+      setShowServiceV2Detail(false);
+      window.history.pushState({}, '', '/timeline');
+    }} />;
+  }
+
+  if (showServiceV1Detail) {
+    return <ServiceV1Detail onGoBack={() => {
+      setShowServiceV1Detail(false);
+      window.history.pushState({}, '', '/timeline');
+    }} />;
+  }
+
+  if (showTimelinePage) {
+    return (
+      <TimelinePage 
+        onGoBack={() => {
+          setShowTimelinePage(false);
+          window.history.pushState({}, '', '/');
+        }} 
+        onServiceV1Click={() => {
+          setShowServiceV1Detail(true);
+          window.history.pushState({}, '', '/service-v1');
+        }}
+        onServiceV2Click={() => {
+          setShowServiceV2Detail(true);
+          window.history.pushState({}, '', '/service-v2');
+        }}
+      />
+    );
+  }
+
+
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden mobile-scroll-fix">
       <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-60" />
       
       {/* Header */}
@@ -337,7 +517,7 @@ const DongjeobLab: React.FC = () => {
           isScrolled && "shadow-md"
         )}
       >
-        <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+        <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center space-x-3">
             <motion.div
               whileHover={{ rotate: 360 }}
@@ -349,21 +529,29 @@ const DongjeobLab: React.FC = () => {
             <span className="text-xl font-bold">동접Lab</span>
           </div>
 
-          <nav className="hidden md:flex items-center space-x-6">
-            <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">소개</a>
-            <a href="#projects" className="text-sm font-medium hover:text-primary transition-colors">프로젝트</a>
-            <a href="#team" className="text-sm font-medium hover:text-primary transition-colors">팀</a>
-            <a href="#contact" className="text-sm font-medium hover:text-primary transition-colors">연락처</a>
-          </nav>
+        <nav className="hidden md:flex items-center space-x-6">
+          <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">소개</a>
+          <a href="#projects" className="text-sm font-medium hover:text-primary transition-colors">프로젝트</a>
+          <a href="#team" className="text-sm font-medium hover:text-primary transition-colors">팀</a>
+          <button 
+            onClick={() => {
+              setShowTimelinePage(true);
+              window.history.pushState({}, '', '/timeline');
+            }}
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
+            타임라인
+          </button>
+        </nav>
 
           <div className="hidden md:flex items-center space-x-3">
             <Button variant="outline" size="sm" asChild>
-              <a href="https://github.com/dongjeoblab" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/Dongjeop-lab" target="_blank" rel="noopener noreferrer">
                 <Github className="h-4 w-4 mr-2" />
                 GitHub
               </a>
             </Button>
-            <Button size="sm">
+            <Button size="sm" onClick={() => setShowNotYetPage(true)}>
               프로젝트 시작하기
             </Button>
           </div>
@@ -384,19 +572,28 @@ const DongjeobLab: React.FC = () => {
               exit={{ opacity: 0, height: 0 }}
               className="md:hidden border-t bg-background"
             >
-              <nav className="container py-4 space-y-3">
-                <a href="#about" className="block py-2 text-sm font-medium hover:text-primary">소개</a>
-                <a href="#projects" className="block py-2 text-sm font-medium hover:text-primary">프로젝트</a>
-                <a href="#team" className="block py-2 text-sm font-medium hover:text-primary">팀</a>
-                <a href="#contact" className="block py-2 text-sm font-medium hover:text-primary">연락처</a>
+          <nav className="container py-4 space-y-3">
+            <a href="#about" className="block py-2 text-sm font-medium hover:text-primary">소개</a>
+            <a href="#projects" className="block py-2 text-sm font-medium hover:text-primary">프로젝트</a>
+            <a href="#team" className="block py-2 text-sm font-medium hover:text-primary">팀</a>
+            <button 
+              onClick={() => {
+                setShowTimelinePage(true);
+                window.history.pushState({}, '', '/timeline');
+                setIsMobileMenuOpen(false);
+              }}
+              className="block py-2 text-sm font-medium hover:text-primary"
+            >
+              타임라인
+            </button>
                 <div className="pt-3 space-y-2">
                   <Button variant="outline" size="sm" className="w-full" asChild>
-                    <a href="https://github.com/dongjeoblab" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/Dongjeop-lab" target="_blank" rel="noopener noreferrer">
                       <Github className="h-4 w-4 mr-2" />
                       GitHub
                     </a>
                   </Button>
-                  <Button size="sm" className="w-full">프로젝트 시작하기</Button>
+                  <Button size="sm" className="w-full" onClick={() => setShowNotYetPage(true)}>프로젝트 시작하기</Button>
                 </div>
               </nav>
             </motion.div>
@@ -406,8 +603,8 @@ const DongjeobLab: React.FC = () => {
 
       <main className="relative z-10">
         {/* Hero Section */}
-        <section className="container px-4 md:px-6 py-24 md:py-32 lg:py-40">
-          <div className="flex flex-col items-center text-center space-y-8">
+        <section className="container py-24 md:py-32 lg:py-40">
+          <div className="flex flex-col items-center justify-center text-center space-y-8 min-h-[60vh]">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -415,45 +612,49 @@ const DongjeobLab: React.FC = () => {
               className="inline-flex items-center rounded-full bg-muted px-3 py-1 text-sm"
             >
               <Star className="mr-2 h-4 w-4 text-primary" />
-              실시간 연결의 혁신
+              이동약자를 위한 AI 연구
             </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl"
+              className="text-3xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
             >
-              동접Lab에서{" "}
+              같이{" "}
               <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                미래를 연결
+                동등한 접근성
               </span>
-              하세요
+              을 만들어가요
             </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="max-w-3xl text-xl text-muted-foreground md:text-2xl"
-            >
-              실시간 데이터 처리와 사용자 경험의 새로운 패러다임을 제시하는 혁신적인 기술 연구소입니다.
-            </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="max-w-3xl text-lg text-muted-foreground md:text-xl"
+        >
+          <strong>『동접』은 이동약자와 비이동약자 모두가 동등한 접근성을 가지길 바라는 마음으로 지어졌습니다.</strong>
+        </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Button size="lg" className="group">
-                프로젝트 둘러보기
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-              <Button variant="outline" size="lg">
-                기술 문서 보기
-              </Button>
-            </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+        >
+          <Button size="lg" className="group" onClick={() => setShowApplyPage(true)}>
+            프로젝트 지원하기
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Button>
+          <Button variant="outline" size="lg" className="group" asChild>
+            <a href="https://techforimpact.io/lab/project/15?tab=member" target="_blank" rel="noopener noreferrer">
+              프로젝트 소개
+              <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
+          </Button>
+        </motion.div>
+
 
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -462,23 +663,23 @@ const DongjeobLab: React.FC = () => {
               className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl"
             >
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">50+</div>
-                <div className="text-muted-foreground">완료된 프로젝트</div>
+                <div className="text-3xl font-bold text-primary">80%+</div>
+                <div className="text-muted-foreground">AI 모델 정확도</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">99.9%</div>
-                <div className="text-muted-foreground">시스템 안정성</div>
+                <div className="text-3xl font-bold text-primary">1만+</div>
+                <div className="text-muted-foreground">라벨링된 이미지</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">24/7</div>
-                <div className="text-muted-foreground">실시간 모니터링</div>
+                <div className="text-3xl font-bold text-primary">1,000+</div>
+                <div className="text-muted-foreground">캠페인 참여자</div>
               </div>
             </motion.div>
           </div>
         </section>
 
         {/* About Section */}
-        <section id="about" className="container px-4 md:px-6 py-24">
+        <section id="about" className="container py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -489,27 +690,32 @@ const DongjeobLab: React.FC = () => {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4">
               동접Lab 소개
             </h2>
-            <p className="max-w-3xl mx-auto text-xl text-muted-foreground">
-              우리는 실시간 연결성과 데이터 처리 기술의 한계를 뛰어넘는 혁신적인 솔루션을 개발합니다.
-            </p>
+        <div className="max-w-3xl mx-auto text-xl text-muted-foreground space-y-4">
+          <p>
+            모든 장소의 물리적이고 환경적인 접근성을 완벽하게 해결하는 데에는 한계가 있겠지만, <br/> 최소한 <strong>정보에 대한 접근성만큼은 누구에게나 공평하고 정확하게 제공되었으면 합니다.</strong>
+          </p>
+          <p>
+            또한, 『동접』이라는 이름에는, <br/> <strong>모두가 하나의 목표를 향해 동시에 접속하듯 함께 협력하고 잘 해나가자는 의지</strong>도 담겨 있습니다.
+          </p>
+        </div>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 icon: <Code className="h-8 w-8 text-primary" />,
-                title: "혁신적인 기술",
-                description: "최신 기술 스택과 아키텍처를 활용한 확장 가능한 솔루션 개발"
+                title: "P1: 기똥찬 모델 만들기",
+                description: "이동약자 접근성 판단 AI 모델 개발. 정확도 80% 이상의 고성능 모델을 목표로 합니다."
               },
               {
                 icon: <Users className="h-8 w-8 text-primary" />,
-                title: "협업 중심",
-                description: "다양한 배경의 전문가들이 함께 만들어가는 창의적인 작업 환경"
+                title: "P2: 기똥찬 AI 모델 어필하기",
+                description: "관리자 대시보드와 B2C 서비스를 통한 모델 활용 및 사용자 참여 유도"
               },
               {
                 icon: <Zap className="h-8 w-8 text-primary" />,
-                title: "실시간 처리",
-                description: "대용량 데이터의 실시간 처리와 분석을 통한 즉각적인 인사이트 제공"
+                title: "팀 협력",
+                description: "팀원 모두가 하나의 목표를 향해 동시에 접속하듯 함께 협력하고 잘 해나가자는 의지"
               }
             ].map((feature, index) => (
               <motion.div
@@ -530,7 +736,7 @@ const DongjeobLab: React.FC = () => {
         </section>
 
         {/* Projects Section */}
-        <section id="projects" className="container px-4 md:px-6 py-24">
+        <section id="projects" className="container py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -539,10 +745,10 @@ const DongjeobLab: React.FC = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4">
-              주요 프로젝트
+              주요 산출물
             </h2>
             <p className="max-w-3xl mx-auto text-xl text-muted-foreground">
-              동접Lab에서 개발한 혁신적인 프로젝트들을 만나보세요.
+              동접Lab에서 개발하는 이동약자 접근성 AI 프로젝트의 주요 산출물들을 만나보세요.
             </p>
           </motion.div>
 
@@ -555,14 +761,14 @@ const DongjeobLab: React.FC = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <ProjectCard {...project} />
+                <ProjectCard {...project} onClick={() => project.projectId && setCurrentProject(project.projectId)} onNotYetClick={() => setShowNotYetPage(true)} />
               </motion.div>
             ))}
           </div>
         </section>
 
         {/* Team Section */}
-        <section id="team" className="container px-4 md:px-6 py-24">
+        <section id="team" className="container py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -578,7 +784,7 @@ const DongjeobLab: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-6">
             {teamMembers.map((member, index) => (
               <motion.div
                 key={index}
@@ -589,7 +795,7 @@ const DongjeobLab: React.FC = () => {
                 whileHover={{ y: -10 }}
                 className="text-center group"
               >
-                <div className="relative mb-4 mx-auto w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20 group-hover:border-primary/40 transition-colors">
+                <div className="relative mb-4 mx-auto w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-primary/20 group-hover:border-primary/40 transition-colors">
                   <img 
                     src={member.avatar} 
                     alt={member.name}
@@ -603,112 +809,32 @@ const DongjeobLab: React.FC = () => {
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="container px-4 md:px-6 py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4">
-              연락하기
-            </h2>
-            <p className="max-w-3xl mx-auto text-xl text-muted-foreground">
-              프로젝트 협업이나 기술 문의가 있으시면 언제든 연락해 주세요.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="space-y-8"
-            >
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <Mail className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">이메일</h3>
-                  <p className="text-muted-foreground">contact@dongjeoblab.com</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <Phone className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">전화</h3>
-                  <p className="text-muted-foreground">+82-2-1234-5678</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <MapPin className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">주소</h3>
-                  <p className="text-muted-foreground">서울특별시 강남구 테헤란로 123</p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="bg-card p-8 rounded-xl border shadow-sm"
-            >
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
-                      이름
-                    </label>
-                    <Input id="name" placeholder="홍길동" />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      이메일
-                    </label>
-                    <Input id="email" type="email" placeholder="hong@example.com" />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                    제목
-                  </label>
-                  <Input id="subject" placeholder="프로젝트 협업 문의" />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    메시지
-                  </label>
-                  <Textarea 
-                    id="message" 
-                    placeholder="문의 내용을 자세히 적어주세요..." 
-                    className="min-h-[120px]"
-                  />
-                </div>
-                <Button type="submit" className="w-full">
-                  메시지 보내기
-                </Button>
-              </form>
-            </motion.div>
-          </div>
-        </section>
       </main>
+
+      {/* Scroll to Top Button */}
+      <AnimatePresence>
+        {isScrolled && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed bottom-6 right-6 z-50"
+          >
+            <Button
+              onClick={scrollToTop}
+              size="icon"
+              className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 bg-primary hover:bg-primary/90"
+              aria-label="맨 위로 이동"
+            >
+              <ChevronUp className="h-6 w-6" />
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Footer */}
       <footer className="border-t bg-muted/50">
-        <div className="container px-4 md:px-6 py-12">
+        <div className="container py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
@@ -718,25 +844,25 @@ const DongjeobLab: React.FC = () => {
                 <span className="text-lg font-bold">동접Lab</span>
       </div>
               <p className="text-sm text-muted-foreground">
-                실시간 연결의 혁신을 이끄는 기술 연구소
+                동등한 접근성을 위한 AI 연구를 통한 모두가 접근 가능한 세상 만들기
         </p>
       </div>
 
             <div>
               <h3 className="font-semibold mb-4">프로젝트</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">실시간 모니터링</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">AI 분석</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">마이크로서비스</a></li>
+                <li><a href="https://github.com/Dongjeop-lab/model-v1" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Model_v1</a></li>
+                <li><a href="https://github.com/Dongjeop-lab/service-v1" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Service_v1</a></li>
+                <li><a href="https://github.com/Dongjeop-lab/service-v2" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Service_v2</a></li>
+                <li><a href="https://github.com/Dongjeop-lab/dataset-v1" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Dataset_v1</a></li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-4">회사</h3>
+              <h3 className="font-semibold mb-4">팀</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><a href="#about" className="hover:text-foreground transition-colors">소개</a></li>
                 <li><a href="#team" className="hover:text-foreground transition-colors">팀</a></li>
-                <li><a href="#contact" className="hover:text-foreground transition-colors">연락처</a></li>
               </ul>
             </div>
 
@@ -751,7 +877,7 @@ const DongjeobLab: React.FC = () => {
           </div>
 
           <div className="border-t mt-12 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 동접Lab. All rights reserved.</p>
+            <p>&copy; 2025 동접Lab. All rights reserved.</p>
           </div>
         </div>
       </footer>

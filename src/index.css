@@ -68,6 +68,82 @@
   }
 }
 
+/* Container and layout fixes */
+@layer components {
+  .container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Mobile scroll fixes */
+@layer utilities {
+  .mobile-scroll-fix {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+  }
+  
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: auto;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #root {
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+  
+  /* Ensure timeline pages can scroll on mobile */
+  .timeline-container {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    height: 100vh;
+    overscroll-behavior-y: contain;
+  }
+  
+  /* Fix for iOS Safari viewport issues */
+  @supports (-webkit-touch-callout: none) {
+    html, body {
+      height: -webkit-fill-available;
+    }
+    
+    .mobile-scroll-fix {
+      min-height: -webkit-fill-available;
+    }
+  }
+  
+  /* Ensure proper scrolling on mobile devices */
+  @media (max-width: 768px) {
+    html, body {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    #root {
+      overflow-y: visible;
+    }
+    
+    .mobile-scroll-fix {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+}
+
 /* Custom animations and effects */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }

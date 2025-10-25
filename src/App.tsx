@@ -845,8 +845,12 @@ const DongjeobLab: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                  <Zap className="h-5 w-5 text-primary-foreground" />
+                <div className="h-8 w-8 rounded-lg bg-white flex items-center justify-center border border-gray-200">
+                  <img 
+                    src="/homepage/logo.png" 
+                    alt="동접Lab 로고" 
+                    className="h-5 w-5 object-contain"
+                  />
                 </div>
                 <span className="text-lg font-bold">동접Lab</span>
       </div>

@@ -453,7 +453,6 @@ const DongjeobLab: React.FC = () => {
     { name: "이노정", role: "BEDE", avatar: "/homepage/team/BEDE_lee_nojung.jpeg" },
     
     // FE 팀
-    { name: "조은", role: "FE", avatar: "/homepage/team/FE_cho_eun.png" },
     { name: "정유정", role: "FE", avatar: "/homepage/team/FE_jeong_yujeong.png" },
     { name: "조재석", role: "FE", avatar: "/homepage/team/FE_cho_jaeseok.png" },
     

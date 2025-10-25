@@ -528,7 +528,7 @@ const DongjeobLab: React.FC = () => {
               className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center overflow-hidden"
             >
               <img 
-                src="/logo.png" 
+                src="/homepage/logo.png" 
                 alt="동접Lab 로고" 
                 className="h-6 w-6 object-contain"
               />

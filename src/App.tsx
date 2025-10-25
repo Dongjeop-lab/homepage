@@ -525,9 +525,13 @@ const DongjeobLab: React.FC = () => {
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
-              className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center"
+              className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center overflow-hidden"
             >
-              <Zap className="h-6 w-6 text-primary-foreground" />
+              <img 
+                src="/logo.png" 
+                alt="동접Lab 로고" 
+                className="h-6 w-6 object-contain"
+              />
             </motion.div>
             <span className="text-xl font-bold">동접Lab</span>
           </div>

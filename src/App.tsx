@@ -433,6 +433,7 @@ const DongjeobLab: React.FC = () => {
     
     // PM
     { name: "이수민", role: "PM", avatar: "/homepage/team/PM_lee_sumin.png" },
+    { name: "강윤지", role: "PM", avatar: "/homepage/team/PM_kang_yunji.png" },
     
     // 팀장들
     { name: "박희수", role: "AIML 팀장", avatar: "/homepage/team/AIML_park_heesu_leader.jpg" },
@@ -444,6 +445,7 @@ const DongjeobLab: React.FC = () => {
     { name: "김서영", role: "AIML", avatar: "/homepage/team/AIML_kim_seoyoung.png" },
     { name: "민지호", role: "AIML", avatar: "/homepage/team/AIML_min_jeeho.jpg" },
     { name: "이영준", role: "AIML", avatar: "/homepage/team/AIML_lee_youngjun.jpg" },
+    { name: "조은", role: "AIML", avatar: "/homepage/team/AIML_cho_eun.png" },
     
     // BEDE 팀
     { name: "김동욱", role: "BEDE", avatar: "/homepage/team/BEDE_kim_dongwook.png" },
@@ -452,6 +454,8 @@ const DongjeobLab: React.FC = () => {
     
     // FE 팀
     { name: "조은", role: "FE", avatar: "/homepage/team/FE_cho_eun.png" },
+    { name: "정유정", role: "FE", avatar: "/homepage/team/FE_jeong_yujeong.png" },
+    { name: "조재석", role: "FE", avatar: "/homepage/team/FE_cho_jaeseok.png" },
     
     // UXUI 팀
     { name: "임유주", role: "UXUI", avatar: "/homepage/team/UXUI_im_yuju.jpg" }

@@ -525,7 +525,7 @@ const DongjeobLab: React.FC = () => {
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
-              className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center overflow-hidden"
+              className="h-10 w-10 rounded-lg bg-white flex items-center justify-center overflow-hidden border border-gray-200"
             >
               <img 
                 src="/homepage/logo.png" 
